@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Premium Finans</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- YAN AÇILIR MENÜ (DRAWER) -->
+    <div id="side-drawer" class="drawer">
+        <div class="drawer-header">
+            <div class="user-profile">
+                <div class="avatar">T</div>
+                <div>
+                    <h4>Finans Paneli</h4>
+                    <span>Premium Hesap</span>
+                </div>
+            </div>
+            <button type="button" class="close-drawer-btn" id="btn-close-drawer">×</button>
+        </div>
+        <div class="drawer-menu">
+            <a href="#" data-target="page-anasayfa">🏠 Ana Sayfa</a>
+            <a href="#" data-target="page-islemler">📊 İşlemler</a>
+            <a href="#" data-target="page-kasa">💰 Kasa (Birikim)</a>
+            <a href="#" data-target="page-taksitler">💳 Taksitler</a>
+            <a href="#" data-target="page-ayarlar">⚙️ Ayarlar</a>
+        </div>
+    </div>
+    <div id="drawer-overlay"></div>
+
+    <!-- ÜST BAR -->
+    <header class="app-header">
+        <button type="button" class="menu-trigger" id="btn-open-drawer">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </button>
+        <div class="header-center">
+            <span class="welcome-text">Hoş Geldiniz</span>
+        </div>
+        <div class="global-date-picker">
+            <select id="filter-ay"></select>
+            <select id="filter-yil"></select>
+        </div>
+    </header>
+
+    <!-- ANA İÇERİK ALANI -->
+    <main id="main-container">
+        
+        <!-- 1. ANA SAYFA -->
+        <section id="page-anasayfa" class="page active">
+            <div class="summary-cards-container">
+                <div class="premium-card card-gelir">
+                    <span class="card-title">Toplam Gelir</span>
+                    <div class="card-values">
+                        <div><span>Tahmini</span><p id="dash-tahmini-gelir">0,00 TL</p></div>
+                        <div><span>Gerçekleşen</span><b id="dash-gerceklesen-gelir">0,00 TL</b></div>
+                    </div>
+                </div>
+                <div class="premium-card card-gider">
+                    <span class="card-title">Toplam Gider</span>
+                    <div class="card-values">
+                        <div><span>Tahmini</span><p id="dash-tahmini-gider">0,00 TL</p></div>
+                        <div><span>Gerçekleşen</span><b id="dash-gerceklesen-gider">0,00 TL</b></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-card glass-card main-balance-card">
+                <div class="balance-info">
+                    <span class="card-title">Kasa (Birikim)</span>
+                    <span class="sub-label">Biriken Tutar</span>
+                    <h2 id="kasa-toplam-bakiye">0,00 TL</h2>
+                    <div class="target-row">
+                        <span>Hedef: <strong id="dash-hedef-text">0,00 TL</strong></span>
+                        <span>Kalan: <strong id="dash-kalan-hedef">0,00 TL</strong></span>
+                    </div>
+                </div>
+                <div class="circle-progress-container">
+                    <div class="circle-box">
+                        <span id="dash-kasa-hedef-yuzde">%0</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="premium-card glass-card investment-summary-card">
+                <span class="card-title">Toplam Yatırım Değeri</span>
+                <div class="inv-row">
+                    <h2 id="dash-gerceklesen-yatirim">0,00 TL</h2>
+                    <div class="mini-chart-mock">📈 Tahmini: <span id="dash-tahmini-yatirim">0,00 TL</span></div>
+                </div>
+            </div>
+
+            <div class="premium-card glass-card">
+                <h3 class="section-heading">Bu Ayın Özeti</h3>
+                <ul class="analysis-list">
+                    <li><span>🟢 En Fazla Gelir</span><strong id="high-max-gelir">-</strong></li>
+                    <li><span>🔴 En Fazla Gider</span><strong id="high-max-gider">-</strong></li>
+                    <li><span>⚡ Yatırıma Ayrılan Oran</span><strong id="dash-yatirim-orani">%0</strong></li>
+                    <li><span>📊 Geçen Aya Göre Gelir</span><strong id="high-gelir-degisim">-</strong></li>
+                    <li><span>📉 Geçen Aya Göre Gider</span><strong id="high-gider-degisim">-</strong></li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 2. İŞLEMLER SAYFASI -->
+        <section id="page-islemler" class="page">
+            <div class="actions-bar">
+                <div class="tabs">
+                    <button type="button" id="tab-gelir" class="tab-btn active">Gelir</button>
+                    <button type="button" id="tab-gider" class="tab-btn">Gider</button>
+                    <button type="button" id="tab-yatirim" class="tab-btn">Yatırım</button>
+                </div>
+                <button type="button" class="inline-add-btn" id="btn-quick-add">+ İşlem Ekle</button>
+            </div>
+
+            <div class="premium-card glass-card">
+                <div class="net-status-bar">
+                    <span>Net Bakiye (Bu Ay):</span>
+                    <strong id="dash-net-bakiye">0,00 TL</strong>
+                </div>
+            </div>
+
+            <div class="list-container" id="islem-listesi"></div>
+        </section>
+
+        <!-- 3. KASA SAYFASI -->
+        <section id="page-kasa" class="page">
+            <!-- EKSİK OLAN KASA GÖSTERGE KARTI EKLENDİ -->
+            <div class="premium-card glass-card text-center">
+                <span class="card-title">Kasa (Birikim) Durumu</span>
+                <h2 id="kasa-sayfasi-bakiye" style="font-size: 28px; font-weight: 900; margin: 10px 0; color: var(--text-dark);">0,00 TL</h2>
+                <p class="desc-text">Sistem dışı veya manuel nakit giriş/çıkış yönetimi.</p>
+                <div class="kasa-buttons">
+                    <button type="button" class="action-btn btn-success" id="btn-kasa-ekle">+ Nakit Girişi</button>
+                    <button type="button" class="action-btn btn-danger" id="btn-kasa-cikar">- Nakit Çıkışı</button>
+                </div>
+            </div>
+            <div class="premium-card glass-card">
+                <h3 class="section-heading">Kasa Hareket Geçmişi</h3>
+                <div class="list-container" id="kasa-hareket-listesi"></div>
+            </div>
+        </section>
+
+        <!-- 4. TAKSİTLENDİRME SAYFASI -->
+        <section id="page-taksitler" class="page">
+            <div class="section-header-inline">
+                <h3 class="section-heading">Taksitli / Vadeli İşlemler</h3>
+                <button type="button" class="inline-add-btn" id="btn-add-taksit">+ Plan Ekle</button>
+            </div>
+            <div class="list-container" id="taksit-plan-listesi"></div>
+        </section>
+
+        <!-- 5. AYARLAR SAYFASI -->
+        <section id="page-ayarlar" class="page">
+            <div class="premium-card glass-card">
+                <h3 class="section-heading">Yıllık Kasa Hedefi</h3>
+                <div class="input-inline-group">
+                    <input type="number" id="input-hedef-kasa" placeholder="Hedef Tutar">
+                    <button type="button" class="action-btn btn-primary" id="btn-save-hedef">Güncelle</button>
+                </div>
+            </div>
+
+            <div class="premium-card glass-card">
+                <h3 class="section-heading">Kategori Havuzu Yönetimi</h3>
+                <div class="input-form-stack">
+                    <select id="ayar-kategori-turu">
+                        <option value="gelir">Gelir Kategorileri</option>
+                        <option value="gider">Gider Kategorileri</option>
+                        <option value="yatirim">Yatırım Kategorileri</option>
+                    </select>
+                    <div class="input-inline-group">
+                        <input type="text" id="ayar-yeni-kategori" placeholder="Yeni kategori adı...">
+                        <button type="button" class="action-btn btn-success" id="btn-add-category">Ekle</button>
+                    </div>
+                </div>
+                <div class="chip-grid" id="ayar-kategori-listesi"></div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- MODAL YAPILARI -->
+    <div id="modal-islem" class="modal">
+        <div class="modal-box">
+            <h3 id="modal-islem-baslik">İşlem Girişi</h3>
+            <input type="hidden" id="form-islem-id">
+            <div class="input-block">
+                <label>Kategori</label>
+                <select id="form-islem-kategori"></select>
+            </div>
+            <div class="input-block-row">
+                <div class="input-block">
+                    <label>Tahmini Tutar</label>
+                    <input type="number" step="0.01" id="form-islem-tahmini">
+                </div>
+                <div class="input-block">
+                    <label>Gerçekleşen Tutar</label>
+                    <input type="number" step="0.01" id="form-islem-gerceklesen">
+                </div>
+            </div>
+            <div class="input-block">
+                <label>Tarih</label>
+                <input type="date" id="form-islem-tarih">
+            </div>
+            <div class="input-block">
+                <label>Açıklama</label>
+                <input type="text" id="form-islem-aciklama" placeholder="Kısa not...">
+            </div>
+            <div class="modal-foot">
+                <button type="button" class="action-btn btn-secondary close-modal-trigger" data-modal="modal-islem">İptal</button>
+                <button type="button" class="action-btn btn-primary" id="btn-save-islem">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-taksit" class="modal">
+        <div class="modal-box">
+            <h3>Taksitlendirme Planı</h3>
+            <div class="input-block">
+                <label>İşlem Türü</label>
+                <select id="form-taksit-turu">
+                    <option value="Kredi Kartı">Kredi Kartı İşlemi</option>
+                    <option value="Kredi">Banka Kredisi</option>
+                    <option value="Taksitli Nakit Avans">Taksitli Nakit Avans</option>
+                </select>
+            </div>
+            <div class="input-block">
+                <label>Kart / Açıklama Adı</label>
+                <input type="text" id="form-taksit-aciklama" placeholder="Örn: Bonus Kart - Alışveriş">
+            </div>
+            <div class="input-block-row">
+                <div class="input-block">
+                    <label>Toplam Tutar</label>
+                    <input type="number" step="0.01" id="form-taksit-toplam">
+                </div>
+                <div class="input-block">
+                    <label>Taksit Sayısı</label>
+                    <input type="number" id="form-taksit-sayisi" min="2">
+                </div>
+            </div>
+            <div class="input-block">
+                <label>Başlangıç Tarihi</label>
+                <input type="date" id="form-taksit-tarih">
+            </div>
+            <div class="modal-foot">
+                <button type="button" class="action-btn btn-secondary close-modal-trigger" data-modal="modal-taksit">İptal</button>
+                <button type="button" class="action-btn btn-primary" id="btn-save-taksit">Oluştur</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="modal-kasa" class="modal">
+        <div class="modal-box">
+            <h3 id="modal-kasa-baslik">Kasa İşlemi</h3>
+            <input type="hidden" id="form-kasa-turu">
+            <div class="input-block">
+                <label>Tutar (TL)</label>
+                <input type="number" step="0.01" id="form-kasa-tutar">
+            </div>
+            <div class="input-block">
+                <label>Açıklama</label>
+                <input type="text" id="form-kasa-aciklama" placeholder="Örn: Kasaya nakit konuldu">
+            </div>
+            <div class="modal-foot">
+                <button type="button" class="action-btn btn-secondary close-modal-trigger" data-modal="modal-kasa">İptal</button>
+                <button type="button" class="action-btn btn-primary" id="btn-save-kasa-hareket">Onayla</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SAF, PREMIUM BOTTOM NAVIGATION -->
+    <nav class="bottom-navigation">
+        <button type="button" class="nav-tab active" data-page="page-anasayfa">
+            <span class="icon">🏠</span><span>Ana Sayfa</span>
+        </button>
+        <button type="button" class="nav-tab" data-page="page-islemler">
+            <span class="icon">📊</span><span>İşlemler</span>
+        </button>
+        <button type="button" class="nav-tab" data-page="page-kasa">
+            <span class="icon">💰</span><span>Kasa</span>
+        </button>
+        <button type="button" class="nav-tab" data-page="page-taksitler">
+            <span class="icon">💳</span><span>Taksitler</span>
+        </button>
+        <button type="button" class="nav-tab" data-page="page-ayarlar">
+            <span class="icon">⚙️</span><span>Ayarlar</span>
+        </button>
+    </nav>
+
+    <script src="app.js"></script>
+</body>
+</html>
