@@ -662,4 +662,16 @@ document.addEventListener("DOMContentLoaded", function() {
             if(targetModal) targetModal.classList.remove('active');
         });
     });
+    // --- SERVICE WORKER (PWA) KAYIT KODU ---
+    // GitHub Pages alt klasör yapısında sorun çıkarmaması için yol kontrolü yapıyoruz
+    if ('serviceWorker' in navigator) {
+        // Mevcut konumu baz alarak sw.js dosyasını çağırır (başında eğik çizgi yok)
+        navigator.serviceWorker.register('sw.js')
+            .then((reg) => {
+                console.log("Premium Finans PWA başarıyla kaydedildi. Kapsam:", reg.scope);
+            })
+            .catch((err) => {
+                console.error("PWA Kurulum Hatası! Dosya bulunamadı veya engellendi:", err);
+            });
+    }
 });
